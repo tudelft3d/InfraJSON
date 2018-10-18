@@ -2,7 +2,66 @@
 "   $schema": "http://json-schema.org/draft-07/schema#",
     "title": "InfraJSON v0.1",
     "description": "InfraJSON specifications v0.1",
-  
+     "definitions":{
+        "ID": {
+            "type":"object",
+            "properties": {
+                "identifier": {"type": "string"},
+                "scope": {"type": "string"}
+            }
+        },
+        "state": {
+            "type":"object",
+            "properties": {
+                "state": {
+                    "type": "string",
+                    "enum":["existing", "proposed"]
+                }
+            }
+        },
+        "status": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "enum":[
+                    "in planning",
+                    "planned",
+                    "in preliminary design",
+                    "preliminary designed",
+                    "in detail design",
+                    "designed",
+                    "under construction",
+                    "constructed",
+                    "temporary service",
+                    "in service",
+                    "out of service",
+                    "removed"
+                    ]
+                }
+            }
+        },
+        "side": {
+            "type":"object",
+            "properties": {
+                "side": {
+                    "type": "string",
+                    "enum":["left", "right", "both"]
+                }
+            }
+        },
+        "featureType": {
+            "type":"object",
+            "properties": {
+                "featureID": {"$ref":"#/definitions/ID"},
+                "name": {"type": "string"},
+                "description": {"type": "string"},
+                "spatialRepresentation": {"type": "string"},
+                "linearlyReferencedLocation": {"type": "string"}
+            }
+        }
+     },
+     
     "LandFeature":{
         "type": "object",
         "properties": {
