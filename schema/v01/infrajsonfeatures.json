@@ -1,0 +1,69 @@
+{
+"   $schema": "http://json-schema.org/draft-07/schema#",
+    "title": "InfraJSON v0.1",
+    "description": "InfraJSON specifications v0.1",
+  
+    "LandFeature":{
+        "type": "object",
+        "properties": {
+            "type": { "enum": ["LandFeature"] }
+         },
+         "required": ["type"],
+         "additionalProperties": false
+     },
+     
+    "Facility":{
+        "type": "object",
+        "properties": {
+            "type": { "enum": ["Facility"] }
+         },
+         "required": ["type"],
+         "additionalProperties": false
+     },
+     
+    "LandDivision":{
+        "type": "object",
+        "properties": {
+            "type": { "enum": ["LandDivision"] }
+         },
+         "required": ["type"],
+         "additionalProperties": false
+     },
+     
+    "Survey":{
+        "type": "object",
+        "properties": {
+            "type": { "enum": ["Survey"] }
+         },
+         "required": ["type"],
+         "additionalProperties": false
+     },
+     
+    "Document":{
+        "type": "object",
+        "properties": {
+            "type": { "enum": ["Document"] }
+         },
+         "required": ["type"],
+         "additionalProperties": false
+     },
+     
+    "SurveyMark":{
+        "type": "object",
+        "properties": {
+            "type": { "enum": ["SurveyMark"] }
+         },
+         "required": ["type"],
+         "additionalProperties": false
+     },
+     
+    "Set":{
+        "type": "object",
+        "properties": {
+            "type": { "enum": ["Set"] }
+         },
+         "required": ["type"],
+         "additionalProperties": false
+     }
+}
+

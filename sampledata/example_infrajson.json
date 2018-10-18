@@ -1,0 +1,43 @@
+{
+  "type": "InfraJSON",
+  "version": "0.1",
+   "metadata": {
+       "datasetID": "GML_e8e7963f-718c-40fb-8253-753f2d468f0f",
+       "scope": "OGC LandInfraSWG",
+       "name": "Land Infra Dataset",
+       "description": "Land Infra Dataset of terrain",
+       "dateTime": "2018-10-04T16:52:59",
+       "datasetVersion": "1.0",
+       "application": "Generated using CityGML2InfraGML python program",
+       "author": "uKnowMe",
+       "infraVersion": "0.1",
+       "language": "English",
+       "defaultCRS" : "urn:ogc:def:crs:EPSG::4326"
+   },
+   "features":{
+        "ls1": {
+            "type": "LandFeature"
+        },
+        "ls2": {
+            "type": "LandFeature"
+        }
+   },
+  "vertices": [
+    [0.0, 0.0, 0.0],
+    [1.0, 0.0, 0.0],
+    [1.0, 0.0, 0.0],
+    [1.0, 0.0, 0.0],
+    [1.0, 1.0, 0.0],
+    [0.0, 1.0, 0.0],
+    [0.0, 0.0, 1.0],
+    [1.0, 0.0, 1.0],
+    [1.0, 1.0, 1.0],
+    [11.0, 11.0, 11.0],
+    [21.0, 21.0, 21.0],
+    [31.0, 31.0, 31.0],
+    [31.0, 41.0, 41.0],
+    [31.0, 51.0, 51.0],
+    [771.0, 61.0, 1.0],
+    [0.0, 1.0, 1.0]
+  ]
+}

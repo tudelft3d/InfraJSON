@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "InfraJSON v0.1",
+  "description": "InfraJSON specifications v0.1",
+  "type": "object",
+
+  "properties": {
+    "type": { "enum": ["InfraJSON"] },
+    "version": { 
+      "type": "string",
+      "pattern": "^(\\d\\.)(\\d+\\.)?(\\*|\\d+)$"
+    },
+    "metadata": {
+      "type": "object",
+      "properties":{
+          "datasetID": {"type": "string"},
+          "scope": {"type": "string"},
+          "name": {"type": "string"},
+          "description": {"type": "string"},
+          "dateTime": {"type": "string",  "format":"date-time"},
+          "datasetVersion": {"type": "string", "pattern":"\\d.\\d"},
+          "application": {"type": "string"},
+          "author": {"type": "string"},
+          "infraVersion": {"type": "string", "pattern":"\\d.\\d" },
+          "language": {"type": "string"},
+          "defaultCRS" : {"type": "string", "pattern":"^urn:ogc:def:crs:EPSG::[0-9]{4,5}$"}
+      } 
+    },
+    "features": {
+      "type": "object",
+      "additionalProperties": {
+      "oneOf": [
+          { "$ref": "infrajsonfeatures.json#/LandFeature" },
+          { "$ref": "infrajsonfeatures.json#/Facility" },
+          { "$ref": "infrajsonfeatures.json#/LandDivision" },
+          { "$ref": "infrajsonfeatures.json#/Survey" },
+          { "$ref": "infrajsonfeatures.json#/Document" },
+          { "$ref": "infrajsonfeatures.json#/SurveyMark" },
+          { "$ref": "infrajsonfeatures.json#/Set" }
+      ]
+      }
+    },
+    
+    "vertices": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {"type": "number"},
+        "minItems": 3,    
+        "maxItems": 3
+      }
+    }
+  },
+  "required": ["type", "version", "features","vertices"],
+  "additionalProperties": false
+}
+
