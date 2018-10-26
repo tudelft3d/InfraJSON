@@ -13,7 +13,8 @@ import jsonschema
 from jsonschema import Draft7Validator
 #import os
 
-filename =  r'/Users/kavisha/Desktop/githubpvt/InfraJSON/sampledata/example_infrajson.json'
+filename =  r'/Users/kavisha/Desktop/githubpvt/InfraJSON/sampledata/example_infrajson_corefeatures.json'
+#filename =  r'/Users/kavisha/Desktop/githubpvt/InfraJSON/sampledata/example_infrajson_landfeature.json'
 schemaname = r'/Users/kavisha/Desktop/githubpvt/InfraJSON/schema/v01/infrajson.json'
 
 fin = open(filename)

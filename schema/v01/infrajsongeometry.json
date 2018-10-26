@@ -1,0 +1,352 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "InfraJSON geometry schema v0.1",       
+
+  "Solid": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["Solid"] },
+      "boundaries": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": { "type": "integer" }
+            }
+          }
+        }
+      }
+   },
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+
+  "MultiSolid": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["MultiSolid"] },
+      "boundaries": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {"type": "integer"}
+              }
+            }
+          }
+        }
+      }
+      },
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+
+  "CompositeSolid": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["CompositeSolid"] },
+      "boundaries": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {"type": "integer"}
+              }
+            }
+          }
+        }
+      }
+      },        
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+
+  "MultiSurface": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["MultiSurface"] },
+      "boundaries": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "array",
+              "items": { "type": "integer" }
+          }
+        }
+      }
+     },       
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+
+  "CompositeSurface": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["CompositeSurface"] },
+      "boundaries": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "array",
+              "items": { "type": "integer" }
+          }
+        }
+      }
+     },        
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+
+  "MultiLineString": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["MultiLineString"] },
+      "boundaries": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {"type": "integer"}
+        }
+      }
+    },        
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+  
+  "LineString": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["LineString"] },
+      "boundaries": {
+         "type": "array",
+         "items": {"type": "integer"},
+         "minItems": 2
+      }
+    },
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+
+  "MultiPoint": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["MultiPoint"] },
+      "boundaries": {
+         "type": "array",
+         "items": {"type": "integer"}
+      }
+    },
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+  
+   "Point": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["Point"] },
+      "boundaries": {
+         "type": "array",
+         "items": {"type": "integer"},
+         "minItems": 1,
+         "maxItems": 1
+      }
+    },
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+  
+  "MultiCurve": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["MultiCurve"] },
+      "boundaries": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {"type": "integer"}
+        }
+      }
+    },        
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+  
+  "Curve": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["Curve"] },
+      "boundaries": {
+         "type": "array",
+         "items": {"type": "integer"},
+         "minItems": 2
+      }
+    },
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+  
+  "CompositeCurve": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["CompositeCurve"] },
+      "boundaries": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {"type": "integer"}
+        }
+      }
+    },        
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+  
+  "Polygon": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["Polygon"] },
+      "boundaries": {
+         "type": "array",
+         "items": {"type": "integer"},
+         "minItems": 3
+      }
+    },
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+  
+  "PolyhedralSurface": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["PolyhedralSurface"] },
+       "boundaries": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "minItems": 3
+          }
+        }
+      }
+     
+      },
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+  
+  "TriangulatedSurface": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["TriangulatedSurface"] },
+       "boundaries": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "minItems": 3,
+            "maxItems": 3
+          }
+        }
+      }
+     
+      },
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+  
+  "Triangle": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["Triangle"] },
+      "boundaries": {
+         "type": "array",
+         "items": {"type": "integer"},
+         "minItems": 3,
+         "maxItems": 3
+      }
+    },
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+  
+  "SimpleIndexedPolygon": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["SimpleIndexedPolygon"] },
+      "boundaries": {
+         "type": "array",
+         "items": {"type": "integer"},
+         "minItems": 3
+      }
+    },
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+  
+  "PolyfaceMesh": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["PolyfaceMesh"] },
+       "boundaries": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "minItems": 3
+          }
+        }
+      }
+     
+      },
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  },
+  
+  "TIN": {
+    "type": "object",
+    "properties": {
+      "type": { "enum": ["TIN"] },
+       "boundaries": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "minItems": 3,
+            "maxItems": 3
+          }
+        }
+      }
+     
+      },
+    "required": ["type", "boundaries"],
+    "additionalProperties": false
+  }
+
+}

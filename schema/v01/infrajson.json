@@ -3,7 +3,7 @@
   "title": "InfraJSON v0.1",
   "description": "InfraJSON specifications v0.1",
   "type": "object",
-
+         
   "properties": {
     "type": { "enum": ["InfraJSON"] },
     "version": { 
@@ -26,19 +26,64 @@
           "defaultCRS" : {"type": "string", "pattern":"^urn:ogc:def:crs:EPSG::[0-9]{4,5}$"}
       } 
     },
+    "set": {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "name": {"type": "string"},
+                "description": {"type": "string"},
+                "authority": {"type": "string"}
+            },
+            "required": ["name"],
+            "additionalProperties": false
+        }
+    },
+    
     "features": {
       "type": "object",
       "additionalProperties": {
       "oneOf": [
+          { "$ref": "infrajsonfeatures.json#/Feature" },
           { "$ref": "infrajsonfeatures.json#/LandFeature" },
+          { "$ref": "infrajsonfeatures.json#/LandSurface" },
+          { "$ref": "infrajsonfeatures.json#/LandElement" },
+          { "$ref": "infrajsonfeatures.json#/LandLayer" },
+          { "$ref": "infrajsonfeatures.json#/SolidLayer" },
+          { "$ref": "infrajsonfeatures.json#/SurfaceLayer" },
+          { "$ref": "infrajsonfeatures.json#/LinearLayer" },
           { "$ref": "infrajsonfeatures.json#/Facility" },
           { "$ref": "infrajsonfeatures.json#/LandDivision" },
           { "$ref": "infrajsonfeatures.json#/Survey" },
           { "$ref": "infrajsonfeatures.json#/Document" },
-          { "$ref": "infrajsonfeatures.json#/SurveyMark" },
-          { "$ref": "infrajsonfeatures.json#/Set" }
+          { "$ref": "infrajsonfeatures.json#/SurveyMark" }
       ]
       }
+    },    
+    "featureAssocation": {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "type": { "enum": ["FeatureAssociation"] },
+                "featureAssociationID": {
+                    "type":"object",
+                    "properties": {
+                        "identifier": {"type": "string"},
+                        "scope": {"type": "string"}
+                    },
+                    "additionalProperties": false
+                 },
+                "name": {"type": "string"},
+                "description": {"type": "string"},
+                "fromFeature": {"type": "string"},
+                "fromRole": {"type": "string"},
+                "toFeature": {"type": "string"},
+                "toRole": {"type": "string"}
+            },
+            "required": ["type", "featureAssociationID", "name", "fromFeature", "fromRole", "toFeature", "toRole"],
+            "additionalProperties": false
+        }
     },
     
     "vertices": {

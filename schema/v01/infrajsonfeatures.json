@@ -8,21 +8,16 @@
             "properties": {
                 "identifier": {"type": "string"},
                 "scope": {"type": "string"}
-            }
+            },
+            "additionalProperties": false
         },
+        
         "state": {
-            "type":"object",
-            "properties": {
-                "state": {
-                    "type": "string",
-                    "enum":["existing", "proposed"]
-                }
-            }
+            "type":"string",
+            "enum":["existing", "proposed"]
         },
+        
         "status": {
-            "type": "object",
-            "properties": {
-                "status": {
                     "type": "string",
                     "enum":[
                     "in planning",
@@ -37,19 +32,14 @@
                     "in service",
                     "out of service",
                     "removed"
-                    ]
-                }
-            }
+                    ]        
         },
+
         "side": {
-            "type":"object",
-            "properties": {
-                "side": {
                     "type": "string",
                     "enum":["left", "right", "both"]
-                }
-            }
         },
+        
         "featureType": {
             "type":"object",
             "properties": {
@@ -59,22 +49,527 @@
                 "spatialRepresentation": {"type": "string"},
                 "linearlyReferencedLocation": {"type": "string"}
             }
+        },
+        
+        "property":{
+            "type":"array",
+            "items": {
+            "type":"object",
+            "properties": {
+                "propertyID": {"type": "string"},
+                "name": {"type": "string"},
+                "description": {"type": "string"},
+                "valueType": {"type": "string"},
+                "value": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "minItems": 1
+                },
+                "units": {"type": "string"}
+            },
+            "required": ["propertyID", "name", "valueType", "value"],
+            "additionalProperties": false
+        }
+        },
+        
+        "propertySet": {
+            "type":"object",
+            "properties": {
+                "name": {"type": "string"},
+                "description": {"type": "string"},
+                "authority": {"type": "string"},
+                "property": {"$ref":"#/definitions/property"}
+            },
+            "required": ["name"],
+            "additionalProperties": false
+        },
+        
+        "linearReferencingMethod": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "enum": [
+                            "milepoint",
+                            "trueMilage",
+                            "kilometer-point",
+                            "kilopoint",
+                            "chainage",
+                            "hectometre-point",
+                            "reverseMilepoint",
+                            "reverseKilometre-point",
+                            "milepointWithLateralOffsetsInFeet",
+                            "milepost",
+                            "kilopost",
+                            "kilomtre-post",
+                            "referencePost",
+                            "countyMilepoint",
+                            "corssStreet",
+                            "controlSection",
+                            "percentage",
+                            "normalized",
+                            "stationing",
+                            "address",
+                            "mileMeasure",
+                            "kilometreMeasure"
+                      ] },
+                "type": {
+                    "type": "string",
+                     "enum": [
+                             "absolute",
+                             "relative",
+                             "interpolative",
+                             "localInterpolative"
+                      ]},
+                "units": {"type": "string"},
+                "constraint": {"type": "string"}      
+            },
+            "additionalProperties": false
+        },
+        
+        "referent": {
+            "type": "object",
+            "properties": {
+                  "name": { "type": "string" },
+                   "type": { 
+                        "type": "string",
+                        "enum": ["referenceMarker", "intersection", "boundary", "landmark"]
+                    },
+                   "position":  {"$ref": "infrajsongeometry.json#/Point"},
+                   "location": { "$ref": "#/definitions/positionExpression"},
+                   "ownedByFeature": { "type": "string" }
+            },
+            "additionalProperties": false
+        },
+        
+        "distanceExpression": {
+             "type": "object",
+             "properties": {
+                 "distanceAlong": {
+                     "type":"object",
+                     "properties": {
+                         "value": { "type": "number" },
+                         "uom": { "type": "string" }
+                      },
+                     "additionalProperties": false
+                 },
+                 "referent": { "$ref": "#/definitions/referent" }
+             },
+             "additionalProperties": false 
+        },
+        
+        "linearElement": {
+            "type": "object",
+            "properties": {
+                "linearElementID": {"type": "string"},
+                "linearElementType": {
+                    "type": "array",
+                    "minItems": 0,    
+                    "maxItems": 1, 
+                    "items": {
+                        "oneOf": [
+                            {"$ref": "infrajsongeometry.json#/Curve"},
+                            {"$ref": "infrajsongeometry.json#/MultiCurve"},
+                            {"$ref": "infrajsongeometry.json#/CompositeCurve"},
+                            {"$ref": "infrajsongeometry.json#/LineString"},
+                            {"$ref": "infrajsongeometry.json#/MultiLineString"},
+                            {"$ref": "infrajsonfeatures.json#/Feature"}
+                        ]
+                    }  
+                },
+                "defaultLRM": { "$ref": "#/definitions/linearReferencingMethod" },
+                "measure": {
+                     "type":"object",
+                     "properties": {
+                         "value": { "type": "number" },
+                         "uom": { "type": "string" }
+                      },
+                     "additionalProperties": false
+                  },
+                "startValue": {
+                      "type":"object",
+                      "properties": {
+                           "value": { "type": "number" },
+                           "uom": { "type": "string" }
+                        },
+                       "additionalProperties": false
+                  }
+             },
+             "additionalProperties": false
+        },
+        
+        "positionExpression": {
+            "type": "object",
+            "properties": {
+                "name": {"type": "string"},
+                "description": {"type": "string"},
+                "linearElement": { "$ref": "#/definitions/linearElement" },
+                "lrm":  { "$ref": "#/definitions/linearReferencingMethod" },
+                "distanceExpression": { "$ref": "#/definitions/distanceExpression" }
+            },
+            "additionalProperties": false
+        },
+        
+        "linearlyReferencedLocation": {
+            "type":"object",
+            "oneOf":[
+            {
+                "type":"object",
+                "properties":{
+                    "name": {"type": "string"},
+                    "description": {"type": "string"},
+                    "atPosition": { "$ref": "#/definitions/positionExpression" }
+                },
+                "required": ["atPosition"],
+                "additionalProperties": false
+            },
+            {
+                "type":"object",
+                "properties":{
+                    "name": {"type": "string"},
+                    "description": {"type": "string"},
+                    "fromPosition": { "$ref": "#/definitions/positionExpression" },
+                    "toPosition": { "$ref": "#/definitions/positionExpression" }
+                },
+                "required": ["fromPosition", "toPosition"],
+                "additionalProperties": false
+            }
+            ]
         }
      },
      
+    "Feature":{
+        "type": "object",
+        "properties":{ 
+            "type": { "enum": ["Feature"]},
+            "featureID": {"$ref":"#/definitions/ID"},
+            "name": {"type": "string"},
+            "description": {"type": "string"},
+            "spatialRepresentation": {
+                "type": "array",
+                "items": {
+                    "oneOf": [
+                        {"$ref": "infrajsongeometry.json#/Point"},
+                        {"$ref": "infrajsongeometry.json#/MultiPoint"},
+                        {"$ref": "infrajsongeometry.json#/Curve"},
+                        {"$ref": "infrajsongeometry.json#/MultiCurve"},
+                        {"$ref": "infrajsongeometry.json#/CompositeCurve"},
+                        {"$ref": "infrajsongeometry.json#/LineString"},
+                        {"$ref": "infrajsongeometry.json#/MultiLineString"},
+                        {"$ref": "infrajsongeometry.json#/Polygon"},
+                        {"$ref": "infrajsongeometry.json#/PolyhedralSurface"},
+                        {"$ref": "infrajsongeometry.json#/TriangulatedSurface"},
+                        {"$ref": "infrajsongeometry.json#/Solid"},
+                        {"$ref": "infrajsongeometry.json#/MultiSolid"},
+                        {"$ref": "infrajsongeometry.json#/CompositeSolid"},
+                        {"$ref": "infrajsongeometry.json#/MultiSurface"},
+                        {"$ref": "infrajsongeometry.json#/CompositeSurface"},
+                        {"$ref": "infrajsongeometry.json#/SimpleIndexedPolygon"},
+                        {"$ref": "infrajsongeometry.json#/PolyfaceMesh"} 
+                     ] 
+                },
+                "minItems": 0,    
+                "maxItems": 1 
+            },
+            "linearlyReferencedLocation": {
+                "$ref":"#/definitions/linearlyReferencedLocation"
+            },
+            "property": {"$ref":"#/definitions/property"},
+            "propertySet": {"$ref":"#/definitions/propertySet"}
+         },
+         "required": ["type", "featureID"],
+         "additionalProperties": false
+    },     
+    
     "LandFeature":{
         "type": "object",
-        "properties": {
-            "type": { "enum": ["LandFeature"] }
+        "properties":{ 
+            "type": { "enum": ["LandFeature"] },
+            "featureID": {"$ref":"#/definitions/ID"},
+            "name": {"type": "string"},
+            "description": {"type": "string"},
+            "state": {"$ref":"#/definitions/state"},
+            "spatialRepresentation": {
+                "type": "array",
+                "items": {
+                    "oneOf": [
+                        {"$ref": "infrajsongeometry.json#/Point"},
+                        {"$ref": "infrajsongeometry.json#/MultiPoint"},
+                        {"$ref": "infrajsongeometry.json#/Curve"},
+                        {"$ref": "infrajsongeometry.json#/MultiCurve"},
+                        {"$ref": "infrajsongeometry.json#/CompositeCurve"},
+                        {"$ref": "infrajsongeometry.json#/LineString"},
+                        {"$ref": "infrajsongeometry.json#/MultiLineString"},
+                        {"$ref": "infrajsongeometry.json#/Polygon"},
+                        {"$ref": "infrajsongeometry.json#/PolyhedralSurface"},
+                        {"$ref": "infrajsongeometry.json#/TriangulatedSurface"},
+                        {"$ref": "infrajsongeometry.json#/Solid"},
+                        {"$ref": "infrajsongeometry.json#/MultiSolid"},
+                        {"$ref": "infrajsongeometry.json#/CompositeSolid"},
+                        {"$ref": "infrajsongeometry.json#/MultiSurface"},
+                        {"$ref": "infrajsongeometry.json#/CompositeSurface"},
+                        {"$ref": "infrajsongeometry.json#/SimpleIndexedPolygon"},
+                        {"$ref": "infrajsongeometry.json#/PolyfaceMesh"} 
+                     ] 
+                },
+                "minItems": 0,    
+                "maxItems": 1 
+            },
+            "linearlyReferencedLocation": { "$ref":"#/definitions/linearlyReferencedLocation" },
+            "property": {"$ref":"#/definitions/property"},
+            "propertySet": {"$ref":"#/definitions/propertySet"}
          },
-         "required": ["type"],
+         "required": ["type", "featureID", "state"],
          "additionalProperties": false
-     },
-     
+    },
+    
+    "LandSurface":{
+        "type": "object",
+        "properties":{ 
+            "type": { "enum": ["LandSurface"] },
+            "featureID": {"$ref":"#/definitions/ID"},
+            "name": {"type": "string"},
+            "description": {"type": "string"},
+            "state": {"$ref":"#/definitions/state"},
+            "material": {"type": "string"},
+            "spatialRepresentation": {"$ref": "infrajsongeometry.json#/TIN"},
+            "linearlyReferencedLocation": { "$ref":"#/definitions/linearlyReferencedLocation" },
+            "property": {"$ref":"#/definitions/property"},
+            "propertySet": {"$ref":"#/definitions/propertySet"}
+         },
+         "required": ["type", "featureID", "state", "spatialRepresentation"],
+         "additionalProperties": false
+    },
+    
+    "LandElement":{
+        "type": "object",
+        "properties":{ 
+            "type": { "enum": ["LandElement"] },
+            "featureID": {"$ref":"#/definitions/ID"},
+            "name": {"type": "string"},
+            "description": {"type": "string"},
+            "state": {"$ref":"#/definitions/state"},
+            "elementType": {
+                "type":"string",
+                "enum":["WaterBody", "Vegetation", "LandForm"]    
+            },
+            "material": {"type": "string"},
+            "spatialRepresentation": {
+                "type": "array",
+                "items": {
+                    "oneOf": [
+                        {"$ref": "infrajsongeometry.json#/Point"},
+                        {"$ref": "infrajsongeometry.json#/MultiPoint"},
+                        {"$ref": "infrajsongeometry.json#/Curve"},
+                        {"$ref": "infrajsongeometry.json#/MultiCurve"},
+                        {"$ref": "infrajsongeometry.json#/CompositeCurve"},
+                        {"$ref": "infrajsongeometry.json#/LineString"},
+                        {"$ref": "infrajsongeometry.json#/MultiLineString"},
+                        {"$ref": "infrajsongeometry.json#/Polygon"},
+                        {"$ref": "infrajsongeometry.json#/PolyhedralSurface"},
+                        {"$ref": "infrajsongeometry.json#/TriangulatedSurface"},
+                        {"$ref": "infrajsongeometry.json#/Solid"},
+                        {"$ref": "infrajsongeometry.json#/MultiSolid"},
+                        {"$ref": "infrajsongeometry.json#/CompositeSolid"},
+                        {"$ref": "infrajsongeometry.json#/MultiSurface"},
+                        {"$ref": "infrajsongeometry.json#/CompositeSurface"},
+                        {"$ref": "infrajsongeometry.json#/SimpleIndexedPolygon"},
+                        {"$ref": "infrajsongeometry.json#/PolyfaceMesh"} 
+                     ] 
+                },
+                "minItems": 0,    
+                "maxItems": 1 
+            },
+            "linearlyReferencedLocation": { "$ref":"#/definitions/linearlyReferencedLocation" },
+            "property": {"$ref":"#/definitions/property"},
+            "propertySet": {"$ref":"#/definitions/propertySet"}
+         },
+         "required": ["type", "featureID", "elementType"],
+         "additionalProperties": false
+    },
+    
+    "LandLayer":{
+        "type": "object",
+        "properties":{ 
+            "type": { "enum": ["LandLayer"] },
+            "featureID": {"$ref":"#/definitions/ID"},
+            "name": {"type": "string"},
+            "description": {"type": "string"},
+            "state": {"$ref":"#/definitions/state"},
+            "spatialRepresentation": {
+                "type": "array",
+                "items": {
+                    "oneOf": [
+                        {"$ref": "infrajsongeometry.json#/Point"},
+                        {"$ref": "infrajsongeometry.json#/MultiPoint"},
+                        {"$ref": "infrajsongeometry.json#/Curve"},
+                        {"$ref": "infrajsongeometry.json#/MultiCurve"},
+                        {"$ref": "infrajsongeometry.json#/CompositeCurve"},
+                        {"$ref": "infrajsongeometry.json#/LineString"},
+                        {"$ref": "infrajsongeometry.json#/MultiLineString"},
+                        {"$ref": "infrajsongeometry.json#/Polygon"},
+                        {"$ref": "infrajsongeometry.json#/PolyhedralSurface"},
+                        {"$ref": "infrajsongeometry.json#/TriangulatedSurface"},
+                        {"$ref": "infrajsongeometry.json#/Solid"},
+                        {"$ref": "infrajsongeometry.json#/MultiSolid"},
+                        {"$ref": "infrajsongeometry.json#/CompositeSolid"},
+                        {"$ref": "infrajsongeometry.json#/MultiSurface"},
+                        {"$ref": "infrajsongeometry.json#/CompositeSurface"},
+                        {"$ref": "infrajsongeometry.json#/SimpleIndexedPolygon"},
+                        {"$ref": "infrajsongeometry.json#/PolyfaceMesh"} 
+                     ] 
+                },
+                "minItems": 0,    
+                "maxItems": 1 
+            },
+            "linearlyReferencedLocation": { "$ref":"#/definitions/linearlyReferencedLocation" },
+            "property": {"$ref":"#/definitions/property"},
+            "propertySet": {"$ref":"#/definitions/propertySet"}
+         },
+         "required": ["type", "featureID"],
+         "additionalProperties": false
+    },
+    
+    "SolidLayer":{
+        "type": "object",
+        "properties":{ 
+            "type": { "enum": ["SolidLayer"] },
+            "featureID": {"$ref":"#/definitions/ID"},
+            "name": {"type": "string"},
+            "description": {"type": "string"},
+            "state": {"$ref":"#/definitions/state"},
+            "material": {"type": "string"},
+            "spatialRepresentation": {"$ref": "infrajsongeometry.json#/PolyfaceMesh"},
+            "linearlyReferencedLocation": { "$ref":"#/definitions/linearlyReferencedLocation" },
+            "property": {"$ref":"#/definitions/property"},
+            "propertySet": {"$ref":"#/definitions/propertySet"}
+         },
+         "required": ["type", "featureID", "spatialRepresentation"],
+         "additionalProperties": false
+    },
+    
+    "SurfaceLayer":{
+        "type": "object",
+        "properties":{ 
+            "type": { "enum": ["SurfaceLayer"] },
+            "featureID": {"$ref":"#/definitions/ID"},
+            "name": {"type": "string"},
+            "description": {"type": "string"},
+            "state": {"$ref":"#/definitions/state"},
+            "material": {"type": "string"},
+            "topSurface": {"$ref": "infrajsongeometry.json#/TIN"},
+            "bottomSurface": {"$ref": "infrajsongeometry.json#/TIN"},
+            "extent": {"$ref": "infrajsongeometry.json#/Polygon"},
+            "linearlyReferencedLocation": { "$ref":"#/definitions/linearlyReferencedLocation" },
+            "property": {"$ref":"#/definitions/property"},
+            "propertySet": {"$ref":"#/definitions/propertySet"}
+         },
+         "required": ["type", "featureID", "topSurface", "bottomSurface", "extent"],
+         "additionalProperties": false
+    },
+    
+    "LinearLayer":{
+        "type": "object",
+        "properties":{ 
+            "type": { "enum": ["LinearLayer"] },
+            "featureID": {"$ref":"#/definitions/ID"},
+            "name": {"type": "string"},
+            "description": {"type": "string"},
+            "state": {"$ref":"#/definitions/state"},
+            "LandCrossSection": {
+                "type":"array",
+                "minItems": 1,
+                "items": {
+                    "type":"object",
+                    "properties": {
+                        "landCrossSectionID": {"type": "string"},
+                        "name": {"type": "string"},
+                        "description": {"type": "string"},
+                        "locatedAlong": {
+                            "type":"object",
+                            "properties": {
+                                "linearElement": { "$ref": "#/definitions/linearElement" }
+                            },
+                            "additionalProperties": false
+                        },
+                        "distanceAlong": { "$ref": "#/definitions/distanceExpression" },
+                        "horizontalDisplacement": {
+                            "type":"object",
+                            "properties": {
+                                "value": { "type": "number" },
+                                "uom": { "type": "string" }
+                            }
+                        },
+                        "verticalDisplacement": {
+                            "type":"object",
+                            "properties": {
+                                "value": { "type": "number" },
+                                "uom": { "type": "string" }
+                            }
+                        },
+                        "crossSectionArea": {
+                            "type":"array",
+                            "items": {
+                                "type":"object",
+                                "properties": {
+                                    "crossSectionAreaID": {"type": "string"},
+                                    "name": {"type": "string"},
+                                    "description": {"type": "string"},
+                                    "material": {"type": "string"},
+                                    "area": {
+                                        "type":"object",
+                                        "properties": {
+                                            "value": { "type": "number" },
+                                            "uom": { "type": "string" }
+                                         }
+                                    },
+                                    "crossSectionPoints":{
+                                        "type":"array",
+                                        "minItems": 3,
+                                        "items": {
+                                             "type":"object",
+                                             "properties": {
+                                                 "name": {"type": "string"},
+                                                 "description": {"type": "string"},
+                                                 "horizontalOffset": {
+                                                     "type":"object",
+                                                     "properties": {
+                                                         "value": { "type": "number" },
+                                                         "uom": { "type": "string" }
+                                                     }
+                                                 },
+                                                 "verticalOffset": {
+                                                     "type":"object",
+                                                     "properties": {
+                                                         "value": { "type": "number" },
+                                                         "uom": { "type": "string" }
+                                                     }
+                                                 }
+                                             }
+                                        }
+                                    }
+                                },
+                                "additionalProperties": false
+                            }
+                        } 
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "linearlyReferencedLocation": { "$ref":"#/definitions/linearlyReferencedLocation" },
+            "property": {"$ref":"#/definitions/property"},
+            "propertySet": {"$ref":"#/definitions/propertySet"}
+         },
+         "required": ["type", "featureID"],
+         "additionalProperties": false
+    },
+    
     "Facility":{
         "type": "object",
         "properties": {
-            "type": { "enum": ["Facility"] }
+            "type": { "enum": ["Facility"] },
+            "name": {"type": "string"},
+            "description": {"type": "string"}
          },
          "required": ["type"],
          "additionalProperties": false
@@ -101,28 +596,35 @@
     "Document":{
         "type": "object",
         "properties": {
-            "type": { "enum": ["Document"] }
+            "type": { "enum": ["Document"] },
+            "featureID": {"$ref":"#/definitions/ID"},
+            "name": {"type": "string"},
+            "description": {"type": "string"},
+            "documentType": {"type": "string"},
+            "documentContent": {
+                "type": "string",
+                "format": "uri"
+            }
          },
-         "required": ["type"],
+         "required": ["type", "featureID", "documentType"],
          "additionalProperties": false
      },
      
     "SurveyMark":{
         "type": "object",
         "properties": {
-            "type": { "enum": ["SurveyMark"] }
+            "type": { "enum": ["SurveyMark"] },
+            "featureID": {"$ref":"#/definitions/ID"},
+            "name": {"type": "string"},
+            "description": {"type": "string"},
+            "identification": {"type": "string"},
+            "spatialRepresentation": { "$ref": "infrajsongeometry.json#/Point" }
          },
-         "required": ["type"],
-         "additionalProperties": false
-     },
-     
-    "Set":{
-        "type": "object",
-        "properties": {
-            "type": { "enum": ["Set"] }
-         },
-         "required": ["type"],
+         "required": ["type", "featureID", "spatialRepresentation"],
          "additionalProperties": false
      }
+     
+
+     
 }
 

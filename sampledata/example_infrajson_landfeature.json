@@ -1,0 +1,406 @@
+{
+    "type": "InfraJSON",
+    "version": "0.1",
+    "metadata": {
+       "datasetID": "GML_e8e7963f-718c-40fb-8253-753f2d468f0f",
+       "scope": "OGC LandInfraSWG",
+       "name": "Land Infra Dataset",
+       "description": "Land Infra Dataset of terrain",
+       "dateTime": "2018-10-04T16:52:59",
+       "datasetVersion": "1.0",
+       "application": "Generated using CityGML2InfraGML python program",
+       "author": "uKnowMe",
+       "infraVersion": "0.1",
+       "language": "English",
+       "defaultCRS" : "urn:ogc:def:crs:EPSG::4326"
+    },
+    "set": [{
+       "name": "set example",
+       "description": "set example of features",
+       "authority": "OGC/ISO"
+    }],
+    
+    "features":{
+      
+        "lf1": {
+            "type": "LandFeature",
+            "featureID": {
+                "identifier": "lf1",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "OtherLandFeature",
+            "description": "a land feature that is not a LandElement LandSurface or LandLayer",
+            "state": "existing",
+            "property": [{
+                "propertyID": "p1",
+                "description": "color of land feature",
+			    "name": "color",
+				"valueType": "string",
+				"value": ["yellow"]
+            }]
+        },
+        
+        "ls1": {
+            "type": "LandSurface",
+            "featureID": {
+                "identifier": "ls1",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "existing ground surface",
+            "description": "from OGC 15-111r1 Annex E.3.1 Breakline example",
+            "state": "existing",
+            "material": "topsoil",
+            "spatialRepresentation":{
+                "type": "TIN",
+                "boundaries": [[[0, 3, 2]], [[4, 5, 6]], [[0, 1, 5]], [[1, 2, 6]], [[2, 3, 7]], [[3, 0, 4]]]   
+            },
+            "property": [{
+                "propertyID": "p1",
+                "description": "color of land feature",
+			    "name": "color",
+				"valueType": "string",
+				"value": ["yellow"]
+            }]
+        },
+        
+        "le1": {
+            "type": "LandElement",
+            "featureID": {
+                "identifier": "le1",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "glacier",
+            "description": "ice formation",
+            "state": "existing",
+            "elementType": "WaterBody",
+            "material": "ice",
+            "spatialRepresentation":[{
+                "type": "Polygon",
+                "boundaries": [1,2,3,4]
+            }]
+        },
+        
+        "le2": {
+            "type": "LandElement",
+            "featureID": {
+                "identifier": "le2",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "ob river",
+            "description": "ob river",
+            "state": "existing",
+            "elementType": "WaterBody",
+            "material": "water" ,
+            "spatialRepresentation":[{
+                "type": "Polygon",
+                "boundaries": [1,2,3,4]
+            }]
+        },
+        
+        "ll1": {
+            "type": "LandLayer",
+            "featureID": {
+                "identifier": "ll1",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "OtherLandLayer",
+            "description": "a land layer land feature that is not a SolidLayer SurfacesLayer or LinearLayer",
+            "state": "existing",
+            "spatialRepresentation":[{
+                "type": "Polygon",
+                "boundaries": [1,2,3,4]
+            }]
+        },
+        
+        "sl1": {
+            "type": "SolidLayer",
+            "featureID": {
+                "identifier": "sl1",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "top soil layer",
+            "description": "represented as a SolidLayer",
+            "state": "existing",
+            "material": "topsoil",
+            "spatialRepresentation":{
+                "type": "PolyfaceMesh",
+                "boundaries": [[[0, 3, 2, 5]], [[4, 5, 6]], [[0, 1, 5]], [[1, 2, 6]], [[2, 3, 7]], [[3, 0, 4]]]
+            }
+        },
+        
+        "surfl1": {
+            "type": "SurfaceLayer",
+            "featureID": {
+                "identifier": "surfl1",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "top soil layer",
+            "description": "represented as a SurfacesLayer",
+            "state": "existing",
+            "material": "topsoil",
+            "topSurface":{
+                "type": "TIN",
+                "boundaries": [[[0, 3, 2]], [[4, 5, 6]], [[0, 1, 5]], [[1, 2, 6]], [[2, 3, 7]], [[3, 0, 4]]]
+            },
+            "bottomSurface":{
+                "type": "TIN",
+                "boundaries": [[[0, 3, 2]], [[4, 5, 6]], [[0, 1, 5]], [[1, 2, 6]], [[2, 3, 7]], [[3, 0, 4]]]
+            },
+            "extent": {
+                "type": "Polygon",
+                "boundaries": [1,2,3,4]
+            }
+        },
+        
+        "linl1": {
+            "type": "LinearLayer",
+            "featureID": {
+                "identifier": "linl1",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "top soil layer",
+            "description": "represented as a LinearLayer. from OGC 15-111r1 Annex E",
+            "state": "existing",
+            "LandCrossSection": [
+            {
+                "landCrossSectionID": "lcs1",
+                "name": "lcs1",
+                "description": "lcs 1",
+                "locatedAlong": { 
+                    "linearElement": {
+                        "linearElementID": "linearlement1",
+                        "linearElementType":[{
+                            "type": "CompositeCurve",
+                            "boundaries": [[1,2],[3,4,5]]
+                         }],
+                     
+                    "defaultLRM": {
+                        "name": "milepoint",
+                        "type": "absolute",
+                        "units": "mile",
+                        "constraint": "none"
+                    },
+                    "measure": {
+                        "value": 50,
+                        "uom": "m"
+                    },
+                    "startValue": {
+                        "value": 0,
+                        "uom": "m"
+                    }
+                }
+                },
+                "distanceAlong": {
+                    "distanceAlong": {
+                        "value": 0,
+                        "uom": "m"
+                    }
+                },
+                "horizontalDisplacement": {
+                    "value": 0,
+                    "uom": "m"
+                },
+                "verticalDisplacement": {
+                    "value": 0,
+                    "uom": "m"
+                },
+                "crossSectionArea":[{
+                    "crossSectionAreaID": "csa1",
+                    "name": "area1",
+                    "description": "area of lcs1",
+                    "material": "topsoil",
+                    "area": {
+                        "value": 50,
+                        "uom": "m2"
+                    },
+                    "crossSectionPoints": [{
+                        "name": "left top",
+                        "description": "left top point",
+                        "horizontalOffset": {
+                            "value": -25,
+                            "uom": "m"
+                        },
+                        "verticalOffset": {
+                            "value": 5,
+                            "uom": "m"
+                        }
+                    },
+                    {
+                        "name": "right top",
+                        "description": "right top point",
+                        "horizontalOffset": {
+                            "value": 25,
+                            "uom": "m"
+                        },
+                        "verticalOffset": {
+                            "value": 0,
+                            "uom": "m"
+                        }
+                    },
+                    {
+                        "name": "right bottom",
+                        "description": "right bottom point",
+                        "horizontalOffset": {
+                            "value": 25,
+                            "uom": "m"
+                        },
+                        "verticalOffset": {
+                            "value": -1,
+                            "uom": "m"
+                        }
+                    },
+                    {
+                        "name": "left bottom",
+                        "description": "left bottom point",
+                        "horizontalOffset": {
+                            "value": -25,
+                            "uom": "m"
+                        },
+                        "verticalOffset": {
+                            "value": 4,
+                            "uom": "m"
+                        }
+                    }]
+                     
+                }]
+            
+            },
+            {
+                "landCrossSectionID": "lcs2",
+                "name": "lcs2",
+                "description": "lcs 2",
+                "locatedAlong": { 
+                    "linearElement": {
+                        "linearElementID": "linearelement2",
+                        "linearElementType":[{
+                        "type": "Feature",
+                        "featureID":{
+                            "identifier" : "f10",
+                            "scope": "LandInfra InfraJSON"
+                        },
+                        "name": "feature 10",
+                        "description": "description of feature 10",
+                        "spatialRepresentation" : [{
+                               "type": "TriangulatedSurface",
+                                "boundaries": [[[0, 3, 2]], [[4, 5, 6]], [[0, 1, 5]], [[1, 2, 6]], [[2, 3, 7]], [[3, 0, 4]]]
+                        }]
+                    }],
+                    
+                    "defaultLRM": {
+                        "name": "milepoint",
+                        "type": "absolute",
+                        "units": "mile",
+                        "constraint": "none"
+                    },
+                    "measure": {
+                        "value": 50,
+                        "uom": "m"
+                    },
+                    "startValue": {
+                        "value": 0,
+                        "uom": "m"
+                    }
+                }
+                },
+                "distanceAlong": {
+                    "distanceAlong":{
+                        "value": 50,
+                        "uom": "m"
+                    }
+                },
+                "horizontalDisplacement": {
+                    "value": 0,
+                    "uom": "m"
+                },
+                "verticalDisplacement": {
+                    "value": 0,
+                    "uom": "m"
+                },
+                "crossSectionArea": [{
+                    "crossSectionAreaID": "csa2",
+                    "name": "area2",
+                    "description": "area of lcs2",
+                    "material": "topsoil",
+                    "area": {
+                        "value": 50,
+                        "uom": "m2"
+                    },
+                    "crossSectionPoints": [
+                    {
+                        "name": "left top",
+                        "description": "left top point",
+                        "horizontalOffset": {
+                            "value": -25,
+                            "uom": "m"
+                        },
+                        "verticalOffset": {
+                            "value": 10,
+                            "uom": "m"
+                        }
+                    },
+                    {
+                        "name": "right top",
+                        "description": "right top point",
+                        "horizontalOffset": {
+                            "value": 25,
+                            "uom": "m"
+                        },
+                        "verticalOffset": {
+                            "value": 0,
+                            "uom": "m"
+                        }
+                    },
+                    {
+                        "name": "right bottom",
+                        "description": "right bottom point",
+                        "horizontalOffset": {
+                            "value": 25,
+                            "uom": "m"
+                        },
+                        "verticalOffset": {
+                            "value": -1,
+                            "uom": "m"
+                        }
+                    },
+                    {
+                        "name": "left bottom",
+                        "description": "left bottom point",
+                        "horizontalOffset": {
+                            "value": -25,
+                            "uom": "m"
+                        },
+                        "verticalOffset": {
+                            "value": -9,
+                            "uom": "m"
+                        }
+                    }
+                    ]
+                }]
+            }  
+
+                
+            ]
+        }
+        
+        
+   },
+   
+  "vertices": [
+    [0.0, 0.0, 0.0],
+    [1.0, 0.0, 0.0],
+    [1.0, 0.0, 0.0],
+    [1.0, 0.0, 0.0],
+    [1.0, 1.0, 0.0],
+    [0.0, 1.0, 0.0],
+    [0.0, 0.0, 1.0],
+    [1.0, 0.0, 1.0],
+    [1.0, 1.0, 1.0],
+    [11.0, 11.0, 11.0],
+    [21.0, 21.0, 21.0],
+    [31.0, 31.0, 31.0],
+    [31.0, 41.0, 41.0],
+    [31.0, 51.0, 51.0],
+    [771.0, 61.0, 1.0],
+    [0.0, 1.0, 1.0]
+  ]
+}

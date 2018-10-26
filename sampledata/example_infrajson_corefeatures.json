@@ -1,0 +1,382 @@
+{
+  "type": "InfraJSON",
+  "version": "0.1",
+   "metadata": {
+       "datasetID": "GML_e8e7963f-718c-40fb-8253-753f2d468f0f",
+       "scope": "OGC LandInfraSWG",
+       "name": "Land Infra Dataset",
+       "description": "Land Infra Dataset of terrain",
+       "dateTime": "2018-10-04T16:52:59",
+       "datasetVersion": "1.0",
+       "application": "Generated using CityGML2InfraGML python program",
+       "author": "uKnowMe",
+       "infraVersion": "0.1",
+       "language": "English",
+       "defaultCRS" : "urn:ogc:def:crs:EPSG::4326"
+   },
+   "set": [{
+       "name": "set example",
+       "description": "set example of features",
+       "authority": "OGC/ISO"
+   }],
+
+   "features":{
+        "f1": {
+            "type": "Feature",
+            "featureID":{
+                "identifier" : "f1",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "feature 1",
+            "description": "description of feature 1",
+            "spatialRepresentation" : [{
+                "type": "Solid",
+                "boundaries": [
+                 [ [[0, 3, 2, 1],[0,1,2]], [[4, 5, 6, 7]], [[0, 1, 5, 4]], [[1, 2, 6, 5]], [[2, 3, 7, 6]], [[3, 0, 4, 7]] ] 
+                 ]
+            }]
+        },
+        
+        "f2": {
+            "type": "Feature",
+            "featureID":{
+                "identifier" : "f2",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "feature 2",
+            "description": "description of feature 2",
+            "spatialRepresentation" : [{
+                "type": "Point",
+                "boundaries": [1]
+            }],
+            "linearlyReferencedLocation": {
+                "name": "linearlyReferencedLocation1",
+                "description": "linearlyReferencedLocation of f2",
+                "atPosition": {
+                    "name": "atPosition1",
+                    "description": "atPosition of f2",
+                    "linearElement": {
+                        "linearElementID": "linearlement1",
+                        "linearElementType":[{
+                            "type": "CompositeCurve",
+                            "boundaries": [[1,2],[3,4,5]]
+                         }],
+                        "defaultLRM": {
+                            "name": "chainage",
+                            "type": "absolute",
+                            "units": "m",
+                            "constraint": "none"
+                         },
+                        "measure": {
+                            "value": 10,
+                            "uom": "m"
+                        },
+                        "startValue": {
+                            "value": 0,
+                            "uom": "m"
+                        }
+                    },
+                    "lrm": {
+                       "name": "chainage",
+                       "type": "absolute",
+                       "units": "m",
+                       "constraint": "none"
+                   },
+                    "distanceExpression": {
+                       "distanceAlong": {
+                           "value": 350,
+                           "uom": "m"
+                       },
+                       "referent": {
+                           "name": "station equation",
+                           "type": "boundary",
+                           "position": {
+                                 "type": "Point",
+                                 "boundaries": [1]
+                            },
+                           "location": {
+                               "linearElement": {
+                                    "linearElementID": "linearlement1",
+                                    "linearElementType":[{ 
+                                        "type": "CompositeCurve",
+                                        "boundaries": [[1,2],[3,4,5]]
+                                    }],
+                                "defaultLRM": {
+                                   "name": "chainage",
+                                    "type": "absolute",
+                                    "units": "m",
+                                    "constraint": "none"
+                                 },
+                                "measure": {
+                                    "value": 10,
+                                    "uom": "m"
+                                },
+                                "startValue": {
+                                    "value": 0,
+                                    "uom": "m"
+                                }    
+                              },
+                               "lrm": {
+                                    "name": "chainage",
+                                    "type": "absolute",
+                                    "units": "m",
+                                    "constraint": "none"
+                               },
+                               "distanceExpression": {
+                                    "distanceAlong": {
+                                        "value": 350,
+                                        "uom": "m"
+                                    }
+                               }                           
+                           
+                           },
+                           "ownedByFeature": "f2"
+                       }
+                   }
+               }
+           }
+       },
+        
+        "f3": {
+            "type": "Feature",
+            "featureID":{
+                "identifier" : "f3",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "feature 3",
+            "description": "description of feature 3",
+            "spatialRepresentation" : [{
+                "type": "LineString",
+                "boundaries": [1,2]
+            }]
+        },
+        
+        "f4": {
+            "type": "Feature",
+            "featureID":{
+                "identifier" : "f4",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "feature 4",
+            "description": "description of feature 4",
+            "spatialRepresentation" : [{
+                "type": "MultiLineString",
+                "boundaries": [[1,2],[3,4,5]]
+            }]
+        },
+        
+        "f5": {
+            "type": "Feature",
+            "featureID":{
+                "identifier" : "f5",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "feature 5",
+            "description": "description of feature 5",
+            "spatialRepresentation" : [{
+                "type": "Curve",
+                "boundaries": [1,2]
+            }]
+        },
+        
+        "f6": {
+            "type": "Feature",
+            "featureID":{
+                "identifier" : "f6",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "feature 6",
+            "description": "description of feature 6",
+            "spatialRepresentation" : [{
+                "type": "MultiCurve",
+                "boundaries": [[1,2],[3,4,5]]
+            }]
+        },
+        
+        "f7": {
+            "type": "Feature",
+            "featureID":{
+                "identifier" : "f7",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "feature 7",
+            "description": "description of feature 7",
+            "spatialRepresentation" : [{
+                "type": "CompositeCurve",
+                "boundaries": [[1,2],[3,4,5]]
+            }]
+        },
+        
+        "f8": {
+            "type": "Feature",
+            "featureID":{
+                "identifier" : "f8",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "feature 8",
+            "description": "description of feature 8",
+            "spatialRepresentation" : [{
+                "type": "Polygon",
+                "boundaries": [1,2,3,4]
+            }]
+        },
+        
+        "f9": {
+            "type": "Feature",
+            "featureID":{
+                "identifier" : "f9",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "feature 9",
+            "description": "description of feature 9",
+            "spatialRepresentation" : [{
+                "type": "PolyhedralSurface",
+                "boundaries": [[[0, 3, 2, 4]], [[4, 5, 6]], [[0, 1, 5]], [[1, 2, 6]], [[2, 3, 7]], [[3, 0, 4]]]
+            }]
+        },
+        
+        "f10": {
+            "type": "Feature",
+            "featureID":{
+                "identifier" : "f10",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "feature 10",
+            "description": "description of feature 10",
+            "spatialRepresentation" : [{
+                "type": "TriangulatedSurface",
+                "boundaries": [[[0, 3, 2]], [[4, 5, 6]], [[0, 1, 5]], [[1, 2, 6]], [[2, 3, 7]], [[3, 0, 4]]]
+            }]
+        },
+        
+        "f11": {
+            "type": "Feature",
+            "featureID":{
+                "identifier" : "f11",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "feature 11",
+            "description": "description of feature 11",
+            "spatialRepresentation" : [{
+                "type": "SimpleIndexedPolygon",
+                "boundaries": [1,2,3,4]
+            }]
+        },
+        
+        "f12": {
+            "type": "Feature",
+            "featureID":{
+                "identifier" : "f12",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "feature 12",
+            "description": "description of feature 12",
+            "spatialRepresentation" : [{
+                "type": "PolyfaceMesh",
+                "boundaries": [[[0, 3, 2, 5]], [[4, 5, 6]], [[0, 1, 5]], [[1, 2, 6]], [[2, 3, 7]], [[3, 0, 4]]]
+            }],
+            "property": [{
+                "propertyID": "p1",
+                "description": "LRM used for a linear element when none is specified",
+			    "name": "defaultLRM",
+				"valueType": "string",
+				"value": ["milepost1", "milepost2"],
+				"units": "miles"
+            }],
+            "propertySet": {
+                "name": "LinearElement",
+                "description": "properties from 19148 ILinearElement",
+                "authority": "OGC/ISO",
+                "property": [{
+                    "propertyID": "p1",
+                    "description": "LRM used for a linear element when none is specified",
+			        "name": "defaultLRM",
+				    "valueType": "string",
+				    "value": ["milepost1", "milepost2"],
+				    "units": "miles"
+                 },
+                 {
+                    "propertyID": "p2",
+                    "description": "LRM used for a linear element when none is specified",
+			        "name": "defaultLRM",
+				    "valueType": "string",
+				    "value": ["milepost1", "milepost2"],
+				    "units": "miles"
+                 }]
+            }
+        },
+        
+        "d1": {
+            "type": "Document",
+            "featureID":{
+                "identifier" : "d1",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "document 1",
+            "description": "description of document 1",
+            "documentType": "Survey Marking 2",
+            "documentContent": "http://city.net/survey/documents1.pdf"
+        },
+        
+        "d2": {
+            "type": "Document",
+            "featureID":{
+                "identifier" : "d2",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "document 2",
+            "description": "description of document 2",
+            "documentType": "Survey Marking 2",
+            "documentContent": "http://city.net/survey/documents2.pdf"
+        },
+        
+        "sm1": {
+            "type": "SurveyMark",
+            "featureID":{
+                "identifier" : "sm1",
+                "scope": "LandInfra InfraJSON"
+            },
+            "name": "survey mark 1",
+            "description": "description of survey mark 1",
+            "identification" : "1001",
+            "spatialRepresentation" : {
+                "type": "Point",
+                "boundaries": [1]
+            }
+         }
+        
+   },
+
+  "featureAssocation": [{
+        "type": "FeatureAssociation",
+        "featureAssociationID": {
+            "identifier": "fa1",
+            "scope": "LandInfra InfraJSON"
+        },
+        "name": "survey marking",
+        "description": "associates document 20160004 with Survey Mark 1001",
+        "fromFeature": "v",
+        "fromRole": "documentation for",
+        "toFeature": "c",
+        "toRole": "documented survey mark"
+   }],
+   
+  "vertices": [
+    [0.0, 0.0, 0.0],
+    [1.0, 0.0, 0.0],
+    [1.0, 0.0, 0.0],
+    [1.0, 0.0, 0.0],
+    [1.0, 1.0, 0.0],
+    [0.0, 1.0, 0.0],
+    [0.0, 0.0, 1.0],
+    [1.0, 0.0, 1.0],
+    [1.0, 1.0, 1.0],
+    [11.0, 11.0, 11.0],
+    [21.0, 21.0, 21.0],
+    [31.0, 31.0, 31.0],
+    [31.0, 41.0, 41.0],
+    [31.0, 51.0, 51.0],
+    [771.0, 61.0, 1.0],
+    [0.0, 1.0, 1.0]
+  ]
+}
