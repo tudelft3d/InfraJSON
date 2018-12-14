@@ -1,8 +1,8 @@
 {
-"   $schema": "http://json-schema.org/draft-07/schema#",
+"   $schema": "http://json-schema.org/draft-04/schema#",
     "title": "InfraJSON v0.1",
     "description": "InfraJSON specifications v0.1",
-     "definitions":{
+    "definitions":{
         "ID": {
             "type":"object",
             "properties": {
@@ -43,7 +43,7 @@
         "featureType": {
             "type":"object",
             "properties": {
-                "featureID": {"$ref":"#/definitions/ID"},
+                "ID": {"$ref":"#/definitions/ID"},
                 "name": {"type": "string"},
                 "description": {"type": "string"},
                 "spatialRepresentation": {"type": "string"},
@@ -52,35 +52,56 @@
         },
         
         "property":{
-            "type":"array",
-            "items": {
             "type":"object",
             "properties": {
-                "propertyID": {"type": "string"},
-                "name": {"type": "string"},
-                "description": {"type": "string"},
-                "valueType": {"type": "string"},
-                "value": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "minItems": 1
+            		"type": { "enum": ["Property"] },
+                "attributes": {
+                		"type": "object",
+                		"properties": {
+                				"name": {"type": "string"},
+                				"description": {"type": "string"},
+                				"valueType": {"type": "string"},
+                				"value": {
+                    				"type": "array",
+                    				"items": {"type": "string"},
+                    				"minItems": 1
+                				},
+                				"units": {"type": "string"}
+                		}    
                 },
-                "units": {"type": "string"}
+                "required": ["name", "valueType", "value"],
+                "additionalProperties": false
             },
-            "required": ["propertyID", "name", "valueType", "value"],
+            "required": ["type", "attributes"],
             "additionalProperties": false
-        }
         },
         
         "propertySet": {
             "type":"object",
             "properties": {
-                "name": {"type": "string"},
-                "description": {"type": "string"},
-                "authority": {"type": "string"},
-                "property": {"$ref":"#/definitions/property"}
+            		"type": { "enum": ["PropertySet"] },
+            		"attributes": {
+            				"type":"object",
+            				"properties": {
+            						"name": {"type": "string"},
+                				"description": {"type": "string"},
+                				"authority": {"type": "string"}
+            				},
+            				"required": ["name"],
+            				"additionalProperties": false
+            		},
+            		"property": {
+            				"oneOf": [
+            						{ 
+            								"type": "array", 
+            								"items": { "type": "string"}, 
+            								"minItems": 1
+            						},
+            						{"$ref":"#/definitions/property"}
+            				]
+            		}
             },
-            "required": ["name"],
+            "required": ["type", "attributes", "property"],
             "additionalProperties": false
         },
         
@@ -136,7 +157,12 @@
                         "enum": ["referenceMarker", "intersection", "boundary", "landmark"]
                     },
                    "position":  {"$ref": "infrajsongeometry.json#/Point"},
-                   "location": { "$ref": "#/definitions/positionExpression"},
+                   "location": { 
+                   			"type": "array",
+        	  						"items": { "type": "string" },
+        	  						"minItems": 1,
+        	  						"maxItems": 1	
+                   },
                    "ownedByFeature": { "type": "string" }
             },
             "additionalProperties": false
@@ -156,46 +182,6 @@
                  "referent": { "$ref": "#/definitions/referent" }
              },
              "additionalProperties": false 
-        },
-        
-        "linearElement": {
-            "type": "object",
-            "properties": {
-                "linearElementID": {"type": "string"},
-                "linearElementType": {
-                    "type": "array",
-                    "minItems": 0,    
-                    "maxItems": 1, 
-                    "items": {
-                        "oneOf": [
-                            {"$ref": "infrajsongeometry.json#/Curve"},
-                            {"$ref": "infrajsongeometry.json#/MultiCurve"},
-                            {"$ref": "infrajsongeometry.json#/CompositeCurve"},
-                            {"$ref": "infrajsongeometry.json#/LineString"},
-                            {"$ref": "infrajsongeometry.json#/MultiLineString"},
-                            {"$ref": "infrajsonfeatures.json#/Feature"}
-                        ]
-                    }  
-                },
-                "defaultLRM": { "$ref": "#/definitions/linearReferencingMethod" },
-                "measure": {
-                     "type":"object",
-                     "properties": {
-                         "value": { "type": "number" },
-                         "uom": { "type": "string" }
-                      },
-                     "additionalProperties": false
-                  },
-                "startValue": {
-                      "type":"object",
-                      "properties": {
-                           "value": { "type": "number" },
-                           "uom": { "type": "string" }
-                        },
-                       "additionalProperties": false
-                  }
-             },
-             "additionalProperties": false
         },
         
         "positionExpression": {
@@ -238,13 +224,61 @@
         }
      },
      
+    "Set": {
+        "type": "object",
+        "properties": {
+        		"type": { "enum": ["Set"] },
+        		"attributes": {
+        				"type": "object",
+        				"properties": {
+          					"name": {"type": "string"},
+              			"description": {"type": "string"},
+              			"authority": {"type": "string"}
+            		},
+          			"required": ["name"],
+          			"additionalProperties": false
+       			 }
+       	},
+       	"required": ["type", "attributes"],
+       	"additionalProperties": false
+    },
+    
+    "FeatureAssociation": {
+        "type": "object",
+        "properties": {
+        		"type": { "enum": ["FeatureAssociation"] },
+            "attributes": {
+            		"type": "object",
+            		"properties": {
+                		"name": {"type": "string"},
+                		"description": {"type": "string"},
+                		"fromFeature": {"type": "string"},
+                		"fromRole": {"type": "string"},
+                		"toFeature": {"type": "string"},
+                		"toRole": {"type": "string"}
+            		},
+            		"required": ["name", "fromFeature", "fromRole", "toFeature", "toRole"],
+            		"additionalProperties": false
+            }
+        },
+        "required": ["type", "attributes"],
+        "additionalProperties": false
+    },
+    
     "Feature":{
         "type": "object",
         "properties":{ 
             "type": { "enum": ["Feature"]},
-            "featureID": {"$ref":"#/definitions/ID"},
-            "name": {"type": "string"},
-            "description": {"type": "string"},
+            "attributes": {
+            		"type": "object",
+            		"properties":{
+            				"ID": {"$ref":"#/definitions/ID"},
+            				"name": {"type": "string"},
+            				"description": {"type": "string"}
+            		},
+            		"required": ["ID"],
+            		"additionalProperties": false
+            },
             "spatialRepresentation": {
                 "type": "array",
                 "items": {
@@ -272,12 +306,28 @@
                 "maxItems": 1 
             },
             "linearlyReferencedLocation": {
-                "$ref":"#/definitions/linearlyReferencedLocation"
+                "type": "array",
+        	  		"items": { "type": "string" },
+        	  		"minItems": 1	
             },
-            "property": {"$ref":"#/definitions/property"},
-            "propertySet": {"$ref":"#/definitions/propertySet"}
+            "property": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/property"}
+      							]
+            		}
+            },
+            "propertySet": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/propertySet"}
+      							]
+            		}
+            }
          },
-         "required": ["type", "featureID"],
+         "required": ["type"],
          "additionalProperties": false
     },     
     
@@ -285,10 +335,17 @@
         "type": "object",
         "properties":{ 
             "type": { "enum": ["LandFeature"] },
-            "featureID": {"$ref":"#/definitions/ID"},
-            "name": {"type": "string"},
-            "description": {"type": "string"},
-            "state": {"$ref":"#/definitions/state"},
+            "attributes": {
+            		"type": "object",
+            		"properties":{
+            				"ID": {"$ref":"#/definitions/ID"},
+            				"name": {"type": "string"},
+            				"description": {"type": "string"},
+            				"state": {"$ref":"#/definitions/state"}
+            		},
+            		"required": ["ID", "state"],
+            		"additionalProperties": false
+           	},
             "spatialRepresentation": {
                 "type": "array",
                 "items": {
@@ -315,11 +372,29 @@
                 "minItems": 0,    
                 "maxItems": 1 
             },
-            "linearlyReferencedLocation": { "$ref":"#/definitions/linearlyReferencedLocation" },
-            "property": {"$ref":"#/definitions/property"},
-            "propertySet": {"$ref":"#/definitions/propertySet"}
+            "linearlyReferencedLocation": {
+                "type": "array",
+        	  		"items": { "type": "string" },
+        	  		"minItems": 1	
+            },
+            "property": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/property"}
+      							]
+            		}
+            },
+            "propertySet": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/propertySet"}
+      							]
+            		}
+            }         
          },
-         "required": ["type", "featureID", "state"],
+         "required": ["type", "attributes"],
          "additionalProperties": false
     },
     
@@ -327,17 +402,47 @@
         "type": "object",
         "properties":{ 
             "type": { "enum": ["LandSurface"] },
-            "featureID": {"$ref":"#/definitions/ID"},
-            "name": {"type": "string"},
-            "description": {"type": "string"},
-            "state": {"$ref":"#/definitions/state"},
-            "material": {"type": "string"},
-            "spatialRepresentation": {"$ref": "infrajsongeometry.json#/TIN"},
-            "linearlyReferencedLocation": { "$ref":"#/definitions/linearlyReferencedLocation" },
-            "property": {"$ref":"#/definitions/property"},
-            "propertySet": {"$ref":"#/definitions/propertySet"}
+            "attributes": {
+            "type": "object",
+            		"properties":{
+            				"ID": {"$ref":"#/definitions/ID"},
+            				"name": {"type": "string"},
+            				"description": {"type": "string"},
+            				"state": {"$ref":"#/definitions/state"},
+            				"material": {"type": "string"}
+            		},
+            		"required": ["ID", "state"],
+            		"additionalProperties": false
+            },
+            "spatialRepresentation": {
+            		"type": "array",
+                "items": {
+                		"$ref": "infrajsongeometry.json#/TIN"
+                }
+            },
+            "linearlyReferencedLocation": {
+                "type": "array",
+        	  		"items": { "type": "string" },
+        	  		"minItems": 1	
+            },
+            "property": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/property"}
+      							]
+            		}
+            },
+            "propertySet": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/propertySet"}
+      							]
+            		}
+            }          
          },
-         "required": ["type", "featureID", "state", "spatialRepresentation"],
+         "required": ["type", "attributes", "spatialRepresentation"],
          "additionalProperties": false
     },
     
@@ -345,15 +450,22 @@
         "type": "object",
         "properties":{ 
             "type": { "enum": ["LandElement"] },
-            "featureID": {"$ref":"#/definitions/ID"},
-            "name": {"type": "string"},
-            "description": {"type": "string"},
-            "state": {"$ref":"#/definitions/state"},
-            "elementType": {
-                "type":"string",
-                "enum":["WaterBody", "Vegetation", "LandForm"]    
+            "attributes": {
+            		"type": "object",
+            		"properties":{
+            				"ID": {"$ref":"#/definitions/ID"},
+            				"name": {"type": "string"},
+            				"description": {"type": "string"},
+            				"state": {"$ref":"#/definitions/state"},
+            				"elementType": {
+                				"type":"string",
+                				"enum":["WaterBody", "Vegetation", "LandForm"]    
+            				},
+            				"material": {"type": "string"}
+            		},
+            		"required": ["ID", "state", "elementType"],
+            		"additionalProperties": false
             },
-            "material": {"type": "string"},
             "spatialRepresentation": {
                 "type": "array",
                 "items": {
@@ -380,11 +492,29 @@
                 "minItems": 0,    
                 "maxItems": 1 
             },
-            "linearlyReferencedLocation": { "$ref":"#/definitions/linearlyReferencedLocation" },
-            "property": {"$ref":"#/definitions/property"},
-            "propertySet": {"$ref":"#/definitions/propertySet"}
+            "linearlyReferencedLocation": {
+                "type": "array",
+        	  		"items": { "type": "string" },
+        	  		"minItems": 1	
+            },
+            "property": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/property"}
+      							]
+            		}
+            },
+            "propertySet": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/propertySet"}
+      							]
+            		}
+            }          
          },
-         "required": ["type", "featureID", "elementType"],
+         "required": ["type", "attributes"],
          "additionalProperties": false
     },
     
@@ -392,10 +522,17 @@
         "type": "object",
         "properties":{ 
             "type": { "enum": ["LandLayer"] },
-            "featureID": {"$ref":"#/definitions/ID"},
-            "name": {"type": "string"},
-            "description": {"type": "string"},
-            "state": {"$ref":"#/definitions/state"},
+            "attributes": {
+            "type": "object",
+            		"properties":{
+            				"ID": {"$ref":"#/definitions/ID"},
+            				"name": {"type": "string"},
+            				"description": {"type": "string"},
+            				"state": {"$ref":"#/definitions/state"}
+            		},
+            		"required": ["ID", "state"],
+            		"additionalProperties": false
+            },
             "spatialRepresentation": {
                 "type": "array",
                 "items": {
@@ -422,11 +559,29 @@
                 "minItems": 0,    
                 "maxItems": 1 
             },
-            "linearlyReferencedLocation": { "$ref":"#/definitions/linearlyReferencedLocation" },
-            "property": {"$ref":"#/definitions/property"},
-            "propertySet": {"$ref":"#/definitions/propertySet"}
-         },
-         "required": ["type", "featureID"],
+            "linearlyReferencedLocation": {
+                "type": "array",
+        	  		"items": { "type": "string" },
+        	  		"minItems": 1	
+            },
+            "property": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/property"}
+      							]
+            		}
+            },
+            "propertySet": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/propertySet"}
+      							]
+            		}
+            }          
+        },
+         "required": ["type", "attributes"],
          "additionalProperties": false
     },
     
@@ -434,17 +589,47 @@
         "type": "object",
         "properties":{ 
             "type": { "enum": ["SolidLayer"] },
-            "featureID": {"$ref":"#/definitions/ID"},
-            "name": {"type": "string"},
-            "description": {"type": "string"},
-            "state": {"$ref":"#/definitions/state"},
-            "material": {"type": "string"},
-            "spatialRepresentation": {"$ref": "infrajsongeometry.json#/PolyfaceMesh"},
-            "linearlyReferencedLocation": { "$ref":"#/definitions/linearlyReferencedLocation" },
-            "property": {"$ref":"#/definitions/property"},
-            "propertySet": {"$ref":"#/definitions/propertySet"}
-         },
-         "required": ["type", "featureID", "spatialRepresentation"],
+            "attributes": {
+            "type": "object",
+            		"properties":{
+            				"ID": {"$ref":"#/definitions/ID"},
+            				"name": {"type": "string"},
+            				"description": {"type": "string"},
+            				"state": {"$ref":"#/definitions/state"},
+            				"material": {"type": "string"}
+            		},
+            		"required": ["ID", "state"],
+            		"additionalProperties": false
+            },
+            "spatialRepresentation": {
+            		"type": "array",
+                "items": {
+                		"$ref": "infrajsongeometry.json#/PolyfaceMesh"
+                }
+            },
+            "linearlyReferencedLocation": {
+                "type": "array",
+        	  		"items": { "type": "string" },
+        	  		"minItems": 1	
+            },
+            "property": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/property"}
+      							]
+            		}
+            },
+            "propertySet": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/propertySet"}
+      							]
+            		}
+            }          
+        },
+         "required": ["type", "attributes", "spatialRepresentation"],
          "additionalProperties": false
     },
     
@@ -452,19 +637,50 @@
         "type": "object",
         "properties":{ 
             "type": { "enum": ["SurfaceLayer"] },
-            "featureID": {"$ref":"#/definitions/ID"},
-            "name": {"type": "string"},
-            "description": {"type": "string"},
-            "state": {"$ref":"#/definitions/state"},
-            "material": {"type": "string"},
-            "topSurface": {"$ref": "infrajsongeometry.json#/TIN"},
-            "bottomSurface": {"$ref": "infrajsongeometry.json#/TIN"},
-            "extent": {"$ref": "infrajsongeometry.json#/Polygon"},
-            "linearlyReferencedLocation": { "$ref":"#/definitions/linearlyReferencedLocation" },
-            "property": {"$ref":"#/definitions/property"},
-            "propertySet": {"$ref":"#/definitions/propertySet"}
-         },
-         "required": ["type", "featureID", "topSurface", "bottomSurface", "extent"],
+            "attributes": {
+            "type": "object",
+            		"properties":{
+            				"ID": {"$ref":"#/definitions/ID"},
+            				"name": {"type": "string"},
+            				"description": {"type": "string"},
+            				"state": {"$ref":"#/definitions/state"},
+            				"material": {"type": "string"},
+            				"extent": {"$ref": "infrajsongeometry.json#/Polygon"},
+            				"topSurface": {"$ref": "infrajsongeometry.json#/TIN"},
+            				"bottomSurface": {"$ref": "infrajsongeometry.json#/TIN"}
+            		},
+            		"required": ["ID", "state", "topSurface", "bottomSurface", "extent"],
+            		"additionalProperties": false
+            },
+            "spatialRepresentation": {
+            	"type": "array",
+                "items": {
+                		"$ref": "infrajsongeometry.json#/TIN"
+                }
+            },
+            "linearlyReferencedLocation": {
+                "type": "array",
+        	  		"items": { "type": "string" },
+        	  		"minItems": 1	
+            },
+            "property": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/property"}
+      							]
+            		}
+            },
+            "propertySet": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/propertySet"}
+      							]
+            		}
+            }          
+        },
+         "required": ["type", "attributes"],
          "additionalProperties": false
     },
     
@@ -472,95 +688,51 @@
         "type": "object",
         "properties":{ 
             "type": { "enum": ["LinearLayer"] },
-            "featureID": {"$ref":"#/definitions/ID"},
-            "name": {"type": "string"},
-            "description": {"type": "string"},
-            "state": {"$ref":"#/definitions/state"},
-            "LandCrossSection": {
-                "type":"array",
-                "minItems": 1,
-                "items": {
-                    "type":"object",
-                    "properties": {
-                        "landCrossSectionID": {"type": "string"},
-                        "name": {"type": "string"},
-                        "description": {"type": "string"},
-                        "locatedAlong": {
-                            "type":"object",
-                            "properties": {
-                                "linearElement": { "$ref": "#/definitions/linearElement" }
-                            },
-                            "additionalProperties": false
-                        },
-                        "distanceAlong": { "$ref": "#/definitions/distanceExpression" },
-                        "horizontalDisplacement": {
-                            "type":"object",
-                            "properties": {
-                                "value": { "type": "number" },
-                                "uom": { "type": "string" }
-                            }
-                        },
-                        "verticalDisplacement": {
-                            "type":"object",
-                            "properties": {
-                                "value": { "type": "number" },
-                                "uom": { "type": "string" }
-                            }
-                        },
-                        "crossSectionArea": {
-                            "type":"array",
-                            "items": {
-                                "type":"object",
-                                "properties": {
-                                    "crossSectionAreaID": {"type": "string"},
-                                    "name": {"type": "string"},
-                                    "description": {"type": "string"},
-                                    "material": {"type": "string"},
-                                    "area": {
-                                        "type":"object",
-                                        "properties": {
-                                            "value": { "type": "number" },
-                                            "uom": { "type": "string" }
-                                         }
-                                    },
-                                    "crossSectionPoints":{
-                                        "type":"array",
-                                        "minItems": 3,
-                                        "items": {
-                                             "type":"object",
-                                             "properties": {
-                                                 "name": {"type": "string"},
-                                                 "description": {"type": "string"},
-                                                 "horizontalOffset": {
-                                                     "type":"object",
-                                                     "properties": {
-                                                         "value": { "type": "number" },
-                                                         "uom": { "type": "string" }
-                                                     }
-                                                 },
-                                                 "verticalOffset": {
-                                                     "type":"object",
-                                                     "properties": {
-                                                         "value": { "type": "number" },
-                                                         "uom": { "type": "string" }
-                                                     }
-                                                 }
-                                             }
-                                        }
-                                    }
-                                },
-                                "additionalProperties": false
-                            }
-                        } 
-                    },
-                    "additionalProperties": false
-                }
+            "attributes": {
+            		"type": "object",
+        				"properties":{ 
+            				"ID": {"$ref":"#/definitions/ID"},
+            				"name": {"type": "string"},
+            				"description": {"type": "string"},
+            				"state": {"$ref":"#/definitions/state"}
+            		},
+            		"required": ["ID", "state"],
+            		"additionalProperties": false
             },
-            "linearlyReferencedLocation": { "$ref":"#/definitions/linearlyReferencedLocation" },
-            "property": {"$ref":"#/definitions/property"},
-            "propertySet": {"$ref":"#/definitions/propertySet"}
-         },
-         "required": ["type", "featureID"],
+            "landCrossSection": {
+      						"type": "array",
+        	  			"items": { "type": "string" },
+        	  			"minItems": 1
+            },
+            "linearElement": {
+        	  		"type": "array",
+        	  		"items": { "type": "string" },
+        	  		"minItems": 1,
+        	  		"maxItems": 1
+        		},
+            "linearlyReferencedLocation": {
+                "type": "array",
+        	  		"items": { "type": "string" },
+        	  		"minItems": 1	
+            },
+            "property": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/property"}
+      							]
+            		}
+            },
+            "propertySet": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/propertySet"}
+      							]
+            		}
+            }          
+        },
+         "required": ["type", "attributes", "landCrossSection", "linearElement"],
          "additionalProperties": false
     },
     
@@ -578,18 +750,38 @@
     "LandDivision":{
         "type": "object",
         "properties": {
-            "type": { "enum": ["LandDivision"] }
+            "type": { "enum": ["LandDivision"] },
+            "attributes": {
+            		"type": "object",
+            		"properties": {
+            				"ID": {"$ref":"#/definitions/ID"},
+            				"name": {"type": "string"},
+            				"description": {"type": "string"}
+            		},
+            		"required": ["ID"],
+            		"additionalProperties": false
+            }
          },
-         "required": ["type"],
+         "required": ["type", "attributes"],
          "additionalProperties": false
      },
      
     "Survey":{
         "type": "object",
         "properties": {
-            "type": { "enum": ["Survey"] }
+            "type": { "enum": ["Survey"] },
+            "attributes": {
+            		"type": "object",
+            		"properties": {
+            				"ID": {"$ref":"#/definitions/ID"},
+            				"name": {"type": "string"},
+            				"description": {"type": "string"}
+            		},
+            		"required": ["ID"],
+            		"additionalProperties": false
+            }
          },
-         "required": ["type"],
+         "required": ["type", "attributes"],
          "additionalProperties": false
      },
      
@@ -597,16 +789,39 @@
         "type": "object",
         "properties": {
             "type": { "enum": ["Document"] },
-            "featureID": {"$ref":"#/definitions/ID"},
-            "name": {"type": "string"},
-            "description": {"type": "string"},
-            "documentType": {"type": "string"},
-            "documentContent": {
-                "type": "string",
-                "format": "uri"
+            "attributes": {
+            		"type": "object",
+            		"properties": {
+            				"ID": {"$ref":"#/definitions/ID"},
+            				"name": {"type": "string"},
+            				"description": {"type": "string"},
+            				"documentType": {"type": "string"},
+            				"documentContent": {
+                				"type": "string",
+                				"format": "uri"
+            				}
+            		},
+            		"required": ["ID", "documentType"],
+            		"additionalProperties": false
+            },
+            "property": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/property"}
+      							]
+            		}
+            },
+            "propertySet": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/propertySet"}
+      							]
+            		}
             }
          },
-         "required": ["type", "featureID", "documentType"],
+         "required": ["type", "attributes"],
          "additionalProperties": false
      },
      
@@ -614,17 +829,183 @@
         "type": "object",
         "properties": {
             "type": { "enum": ["SurveyMark"] },
-            "featureID": {"$ref":"#/definitions/ID"},
-            "name": {"type": "string"},
-            "description": {"type": "string"},
-            "identification": {"type": "string"},
-            "spatialRepresentation": { "$ref": "infrajsongeometry.json#/Point" }
+            "attributes": {
+            		"type": "object",
+            		"properties": {
+            				"ID": {"$ref":"#/definitions/ID"},
+            				"name": {"type": "string"},
+            				"description": {"type": "string"},
+            				"identification": {"type": "string"}
+            		},
+            		"required": ["ID"],
+            		"additionalProperties": false
+            },                    
+            "spatialRepresentation": { "$ref": "infrajsongeometry.json#/Point" },
+            "property": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/property"}
+      							]
+            		}
+            },
+            "propertySet": {
+            		"type": "object",
+      					"additionalProperties": {
+      							"oneOf": [
+      									{"$ref":"#/definitions/propertySet"}
+      							]
+            		}
+            }
          },
-         "required": ["type", "featureID", "spatialRepresentation"],
+         "required": ["type", "attributes", "spatialRepresentation"],
          "additionalProperties": false
-     }
+     },
      
-
+		"CrossSection": {
+        	"type":"object",
+        	"properties": {
+        			"type": { "enum": ["CrossSection"] },
+              "attributes": {
+              		"type": "object",
+                	"properties": {
+                      "name": {"type": "string"},
+                      "description": {"type": "string"},
+                      "horizontalDisplacement": {
+                            "type":"object",
+                            "properties": {
+                                "value": { "type": "number" },
+                                "uom": { "type": "string" }
+                            }
+                        },
+                      "verticalDisplacement": {
+                            "type":"object",
+                            "properties": {
+                                "value": { "type": "number" },
+                                "uom": { "type": "string" }
+                            }
+                      },
+                      "distanceAlong": {
+                            "type":"object",
+                            "properties": {
+                                "value": { "type": "number" },
+                                "uom": { "type": "string" }
+                            }
+                      },
+                      "material": { "type": "string" },
+                      "crossSectionArea": {
+                      		"type":"object",
+                            	"properties": {
+                                	"value": { "type": "number" },
+                                	"uom": { "type": "string" }
+                      				}
+                      },
+                      "crossSectionPoints": {
+                      		"type":"array",
+                         	"minItems": 3,
+                         	"items": {
+                         			"type":"object",
+                         			"properties": {
+                         					"name": {"type": "string"},
+                                  "description": {"type": "string"},
+                                  "horizontalOffset": {
+                                  		"type":"object",
+                                      "properties": {
+                                      		"value": { "type": "number" },
+                                          "uom": { "type": "string" }
+                                      }
+                                  },
+                                  "verticalOffset": {
+                                 			"type":"object",
+                                      "properties": {
+                                      		"value": { "type": "number" },
+                                          "uom": { "type": "string" }
+                                       }
+                                 }
+                         			},
+                         			"required": ["name", "horizontalOffset", "verticalOffset"],
+                         			"additionalProperties": false
+                         }
+                      }
+                      
+                	},
+                	"required": ["name", "distanceAlong"],
+          				"additionalProperties": false
+              }
+        	},
+        	"required": ["type", "attributes"],
+          "additionalProperties": false
+        },
+        
+    "LinearElement": {
+            "type": "object",
+            "properties": {
+            		"type": { "enum": ["LinearElement"] },
+            		"attributes": {
+            				"name": {"type": "string"},
+                		"description": {"type": "string"},               
+                		"linearElementType": {
+                    "type": "array",
+                    "minItems": 0,    
+                    "maxItems": 1, 
+                    "items": {
+                        "oneOf": [
+                            {"$ref": "infrajsongeometry.json#/Curve"},
+                            {"$ref": "infrajsongeometry.json#/MultiCurve"},
+                            {"$ref": "infrajsongeometry.json#/CompositeCurve"},
+                            {"$ref": "infrajsongeometry.json#/LineString"},
+                            {"$ref": "infrajsongeometry.json#/MultiLineString"},
+                            {"$ref": "infrajsonfeatures.json#/Feature"},
+                            {"type": "string"}
+                        ]
+                    }  
+                },
+                		"defaultLRM": { "$ref": "#/definitions/linearReferencingMethod" },
+                		"measure": {
+                     "type":"object",
+                     "properties": {
+                         "value": { "type": "number" },
+                         "uom": { "type": "string" }
+                      },
+                     "additionalProperties": false
+                		},
+                		"startValue": {
+                      "type":"object",
+                      "properties": {
+                           "value": { "type": "number" },
+                           "uom": { "type": "string" }
+                        },
+                      "additionalProperties": false
+               			}
+             },
+             "additionalProperties": false
+        	}
+        
+    	},
+		
+		"LinearlyReferencedLocation": {
+				"type": "object",
+				"properties": {
+						"type": { "enum": ["LinearlyReferencedLocation"] },
+						"attributes": {
+								"type": "object",
+								"properties": {
+										"name": {"type": "string"},
+                		"description": {"type": "string"},
+                		"linearElement": {
+        	  						"type": "array",
+        	  						"items": { "type": "string" },
+        	  						"minItems": 1,
+        	  						"maxItems": 1
+        						},
+        						"lrm":  { "$ref": "#/definitions/linearReferencingMethod" },
+                		"distanceExpression": { "$ref": "#/definitions/distanceExpression" }		
+                }
+						}
+				},
+				"required": ["type", "attributes"],
+				"additionalProperties": false
+		}
      
 }
 

@@ -1,18 +1,22 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "InfraJSON v0.1",
   "description": "InfraJSON specifications v0.1",
+  
   "type": "object",
          
   "properties": {
     "type": { "enum": ["InfraJSON"] },
+    
     "version": { 
       "type": "string",
       "pattern": "^(\\d\\.)(\\d+\\.)?(\\*|\\d+)$"
     },
-    "metadata": {
+    
+    "attributes": {
       "type": "object",
       "properties":{
+      	  "type": { "enum": ["InfraJSON"] },
           "datasetID": {"type": "string"},
           "scope": {"type": "string"},
           "name": {"type": "string"},
@@ -24,20 +28,16 @@
           "infraVersion": {"type": "string", "pattern":"\\d.\\d" },
           "language": {"type": "string"},
           "defaultCRS" : {"type": "string", "pattern":"^urn:ogc:def:crs:EPSG::[0-9]{4,5}$"}
-      } 
+      },
+      "required": ["datasetID"],
+      "additionalProperties": false
     },
+    
     "set": {
-        "type": "array",
-        "items": {
-            "type": "object",
-            "properties": {
-                "name": {"type": "string"},
-                "description": {"type": "string"},
-                "authority": {"type": "string"}
-            },
-            "required": ["name"],
-            "additionalProperties": false
-        }
+    		"type": "object",
+      	"additionalProperties": {
+      			"oneOf": [{"$ref": "infrajsonfeatures.json#/Set"}]
+      	}
     },
     
     "features": {
@@ -56,34 +56,19 @@
           { "$ref": "infrajsonfeatures.json#/LandDivision" },
           { "$ref": "infrajsonfeatures.json#/Survey" },
           { "$ref": "infrajsonfeatures.json#/Document" },
-          { "$ref": "infrajsonfeatures.json#/SurveyMark" }
+          { "$ref": "infrajsonfeatures.json#/SurveyMark" },
+          { "$ref": "infrajsonfeatures.json#/LinearElement" },
+          { "$ref": "infrajsonfeatures.json#/CrossSection" },
+          { "$ref": "infrajsonfeatures.json#/LinearlyReferencedLocation" }
       ]
       }
     },    
-    "featureAssocation": {
-        "type": "array",
-        "items": {
-            "type": "object",
-            "properties": {
-                "type": { "enum": ["FeatureAssociation"] },
-                "featureAssociationID": {
-                    "type":"object",
-                    "properties": {
-                        "identifier": {"type": "string"},
-                        "scope": {"type": "string"}
-                    },
-                    "additionalProperties": false
-                 },
-                "name": {"type": "string"},
-                "description": {"type": "string"},
-                "fromFeature": {"type": "string"},
-                "fromRole": {"type": "string"},
-                "toFeature": {"type": "string"},
-                "toRole": {"type": "string"}
-            },
-            "required": ["type", "featureAssociationID", "name", "fromFeature", "fromRole", "toFeature", "toRole"],
-            "additionalProperties": false
-        }
+    
+    "featureAssociation": {
+        "type": "object",
+      	"additionalProperties": {
+      			"oneOf": [{"$ref": "infrajsonfeatures.json#/FeatureAssociation"}]
+      	}
     },
     
     "vertices": {
